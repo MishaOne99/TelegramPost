@@ -9,10 +9,9 @@ def download_image(url: str, file_name: str) -> None:
 
     with open(file_name, 'wb') as file:
         file.write(response.content)
-    file.closed
 
 
-def checks_format(url_img: str) -> str:
+def outputs_image_format(url_img: str) -> str:
     name_image = unquote(basename(urlsplit(url_img).path))
     format_image = splitext(name_image)[1]
 
