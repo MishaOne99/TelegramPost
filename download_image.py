@@ -6,49 +6,41 @@ import argparse
 from pathlib import Path
 from dotenv import load_dotenv
 from space_x_img_service import fetch_spacex_last_launch
-from nasa_img_service import download_img_apod, download_img_epic
+from nasa_img_service import download_images_apod, download_images_epic
 
 DIRECTORY_NAME = 'images'
-TOKEN = 'API_NASA_KEY'
-NEED_TO_FETCH_SPACE_X = 'Do you want to download images from SpaceX? (y/n): '
-NEED_TO_FETCH_NASA = 'Do you want to download images from NASA? (y/n): '
-NEED_TO_FETCH_EPIC = 'Do you want to download images from EPIC? (y/n): '
 ANSWER = 'y'
 
-ID = {'ID_NAME': 'ID', 'ID_TYPE': str, 'ID_DEFAULT': 'latest', 'ID_HELP_MSG': 'Enter the post publication ID'}
-COUNT = {'COUNT_NAME': 'Count_img', 'COUNT_TYPE': int, 'COUNT_DEFAULT': 1, 'COUNT_HELP_MSG': 'Enter the number of photos to upload'}
 
-
-def main_loop(id: str, count_img: int) -> None:
+def runs_images_download(id: str, img_count: int, download_img_spacex: str, download_img_apod: str, download_img_epic:str) -> None:
     '''
     Создаёт директорию в файловой системе, уточняет какие фотографии должны быть загруженные 
     в неё и скачивает эти фотографии .
     '''
     Path(DIRECTORY_NAME).mkdir(parents=True, exist_ok=True)
     load_dotenv()
-    token = os.environ[TOKEN]
+    token = os.environ['API_NASA_KEY']
 
-    answer_img_spacex = input(NEED_TO_FETCH_SPACE_X).lower()
-    answer_img_apod = input(NEED_TO_FETCH_NASA).lower()
-    answer_img_epic = input(NEED_TO_FETCH_EPIC).lower()
-
-    if answer_img_spacex == ANSWER:
+    if download_img_spacex.lower() == ANSWER:
         fetch_spacex_last_launch(id)
-    if answer_img_apod == ANSWER:
-        download_img_apod(count=count_img, api_key=token)
-    if answer_img_epic == ANSWER:
-        download_img_epic(count=count_img, api_key=token)
+    if download_img_apod.lower() == ANSWER:
+        download_images_apod(count=img_count, api_key=token)
+    if download_img_epic.lower() == ANSWER:
+        download_images_epic(count=img_count, api_key=token)
 
 
 def main():
     '''
     Позволяет работать из командной строки
     '''
-    parser = argparse.ArgumentParser()
-    parser.add_argument(COUNT['COUNT_NAME'], type=COUNT['COUNT_TYPE'], nargs='?', default=COUNT['COUNT_DEFAULT'], help=COUNT['COUNT_HELP_MSG'])
-    parser.add_argument(ID['ID_NAME'], type=ID['ID_TYPE'], nargs='?', default=ID['ID_DEFAULT'], help=ID['ID_HELP_MSG'])
+    parser = argparse.ArgumentParser(description='Downloads images of space')
+    parser.add_argument('Download_img_SpaceX', type=str, nargs='?', default='n', help='Do you want to download images from SpaceX? (y/n)')
+    parser.add_argument('Download_img_APOD', type=str, nargs='?', default='n', help='Do you want to download images from APOD? (y/n)')
+    parser.add_argument('Download_img_EPIC', type=str, nargs='?', default='n', help='Do you want to download images from EPIC? (y/n)')
+    parser.add_argument('IMG_Count', type=int, nargs='?', default=1, help='Enter the number of photos to upload')
+    parser.add_argument('ID', type=str, nargs='?', default='latest', help='Enter the post publication ID')
     args = parser.parse_args()
-    main_loop(args.ID, args.Count_img)
+    runs_images_download(args.ID, args.IMG_Count, args.Download_img_SpaceX, args.Download_img_APOD, args.Download_img_EPIC)
 
 if __name__ == '__main__':
     main()
