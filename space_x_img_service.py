@@ -11,10 +11,10 @@ def fetch_spacex_last_launch(id: str) -> None:
     response = get(f'{SPACE_X_API}/{id}')
     response.raise_for_status()
     
-    space_x_image = response.json()['links']['flickr']['original']
-    enumerate_images = enumerate(space_x_image)
+    space_x_images = response.json()['links']['flickr']['original']
+    numbered_images = enumerate(space_x_images)
 
-    if enumerate_images:
-        for num, link in enumerate_images:
+    if numbered_images:
+        for num, link in numbered_images:
             download_image(link, f'{SPACE_X_PATH}{num}{JPG_FORMAT}')
     print('Not a single photo was recorded from this flight.')
