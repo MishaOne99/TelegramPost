@@ -46,7 +46,7 @@ pip install -r requirements.txt
 
 ## Пример использования скриптов
 
-Из командной строки, командой ``` python download_image.py {COUNT} {ID}``` запускаем скрипт загрузки фотографий
+Из командной строки, командой ``` python download_image.py {--SpaceX} {--APOD} {--EPIC} {COUNT} {ID}``` запускаем скрипт загрузки фотографий
 
 ![Скачивание картинок из источников](img_readme/image-5.png)
 
