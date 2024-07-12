@@ -3,8 +3,8 @@ from urllib.parse import urlsplit, unquote
 from requests import get
 
 
-def download_image(url: str, file_name: str) -> None:
-    response = get(url)
+def download_image(url: str, file_name: str, params: dict = None) -> None:
+    response = get(url, params)
     response.raise_for_status()
 
     with open(file_name, 'wb') as file:
