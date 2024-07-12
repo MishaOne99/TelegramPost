@@ -1,6 +1,6 @@
 from download_and_checks_image import download_image, outputs_image_format
 from requests import get
-from urllib.parse import urlparse, urlencode
+from urllib.parse import urlparse, ParseResult
 
 DEMO_KEY = 'DEMO_KEY'
 NASA_APOD_API = 'https://api.nasa.gov/planetary/apod'
@@ -43,7 +43,6 @@ def download_images_epic(count: int, api_key: str = DEMO_KEY) -> None:
 
         year, month, day = str(date_image).split('-')
         
-        query = urlencode(payload)
-        image_url = urlparse(f'{EPIC_ARCHIVE}/{year}/{month}/{day}/png/{image_id}{PNG_FORMAT}?{query}')
-        
-        download_image(image_url.geturl(), f'{EPIC_PATH}{num}{PNG_FORMAT}')
+        image_url = f'{EPIC_ARCHIVE}/{year}/{month}/{day}/png/{image_id}{PNG_FORMAT}'
+
+        download_image(image_url, f'{EPIC_PATH}{num}{PNG_FORMAT}', payload)
